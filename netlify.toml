@@ -1,6 +1,6 @@
 [build]
   command = "npm run build"
-  publish = "/opt/build/repo/.next"
+  publish = ".next"
 
 [build.environment]
   NEXT_PUBLIC_SITE_URL = "https://www.onlysmash.com"
@@ -9,6 +9,8 @@
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
+  [plugins.inputs]
+    skipBuildVersionCheck = true
 
 [functions]
   node_bundler = "esbuild"
