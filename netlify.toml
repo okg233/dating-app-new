@@ -13,6 +13,16 @@
 [functions]
   node_bundler = "esbuild"
 
+[secrets_scan]
+  omit_paths = [
+    "package-lock.json",
+    ".next/**/*",
+    ".netlify/**/*"
+  ]
+  omit_keys = [
+    "NODE_VERSION"
+  ]
+
 [[headers]]
   for = "/*"
   [headers.values]
