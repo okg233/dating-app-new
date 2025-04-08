@@ -9,8 +9,6 @@
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
-  [plugins.inputs]
-    skipBuildVersionCheck = true
 
 [functions]
   node_bundler = "esbuild"
