@@ -20,10 +20,12 @@
   omit_paths = [
     "package-lock.json",
     ".next/**/*",
-    ".netlify/**/*"
+    ".netlify/**/*",
+    ".netlify/edge-functions/**/*"
   ]
   omit_keys = [
-    "NODE_VERSION"
+    "NODE_VERSION",
+    "NEXTAUTH_URL"
   ]
 
 [[headers]]
