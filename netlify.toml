@@ -1,7 +1,6 @@
 [build]
   command = "npm install --legacy-peer-deps && npx prisma generate && next build"
   publish = ".next"
-  ignore = "git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF ."
 
 [build.environment]
   NEXT_USE_NETLIFY_EDGE = "true"
@@ -15,21 +14,6 @@
 
 [functions]
   node_bundler = "esbuild"
-  included_files = [".env"]
-
-[secrets_scan]
-  omit_paths = [
-    "package-lock.json",
-    ".next/**/*",
-    ".netlify/**/*",
-    ".netlify/edge-functions/**/*"
-  ]
-  omit_keys = [
-    "NODE_VERSION",
-    "NEXTAUTH_URL",
-    "DATABASE_URL",
-    "DIRECT_URL"
-  ]
 
 [[headers]]
   for = "/*"
@@ -37,6 +21,7 @@
     X-Frame-Options = "DENY"
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
+    Content-Security-Policy = "frame-ancestors 'none'"
 
 [[headers]]
   for = "/_next/static/*"
