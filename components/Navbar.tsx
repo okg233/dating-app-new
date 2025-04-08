@@ -5,6 +5,7 @@ import { useSession, signOut } from 'next-auth/react'
 import Link from 'next/link'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
+import Image from 'next/image'
 
 const navigation = [
   { name: 'Home', href: '/' },
@@ -17,7 +18,7 @@ function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
 
-export function Navbar() {
+export default function Navbar() {
   const { data: session } = useSession()
 
   return (
@@ -29,31 +30,70 @@ export function Navbar() {
               <div className="flex">
                 <div className="flex flex-shrink-0 items-center">
                   <Link href="/" className="text-2xl font-bold text-rose-600">
-                    DateMe
+                    Dating App
                   </Link>
                 </div>
                 <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
-                  {navigation.map((item) => (
-                    <Link
-                      key={item.name}
-                      href={item.href}
-                      className="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700"
-                    >
-                      {item.name}
-                    </Link>
-                  ))}
+                  <Link
+                    href="/"
+                    className="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700"
+                  >
+                    Home
+                  </Link>
+                  {session ? (
+                    <>
+                      <Link
+                        href="/dashboard"
+                        className="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700"
+                      >
+                        Dashboard
+                      </Link>
+                      <Link
+                        href="/matches"
+                        className="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700"
+                      >
+                        Matches
+                      </Link>
+                    </>
+                  ) : (
+                    <>
+                      <Link
+                        href="/login"
+                        className="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700"
+                      >
+                        Login
+                      </Link>
+                      <Link
+                        href="/register"
+                        className="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700"
+                      >
+                        Register
+                      </Link>
+                    </>
+                  )}
                 </div>
               </div>
               <div className="hidden sm:ml-6 sm:flex sm:items-center">
                 {session ? (
                   <Menu as="div" className="relative ml-3">
-                    <Menu.Button className="flex rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-rose-500 focus:ring-offset-2">
-                      <img
-                        className="h-8 w-8 rounded-full"
-                        src={session.user?.image || '/default-avatar.png'}
-                        alt=""
-                      />
-                    </Menu.Button>
+                    <div>
+                      <Menu.Button className="flex rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-rose-500 focus:ring-offset-2">
+                        <span className="sr-only">Open user menu</span>
+                        {session.user?.image ? (
+                          <Image
+                            className="h-8 w-8 rounded-full"
+                            src={session.user.image}
+                            alt=""
+                            width={32}
+                            height={32}
+                          />
+                        ) : (
+                          <div className="h-8 w-8 rounded-full bg-rose-600 flex items-center justify-center text-white">
+                            {session.user?.name?.[0] || 'U'}
+                          </div>
+                        )}
+                      </Menu.Button>
+                    </div>
                     <Transition
                       as={Fragment}
                       enter="transition ease-out duration-200"
@@ -83,7 +123,7 @@ export function Navbar() {
                               onClick={() => signOut()}
                               className={classNames(
                                 active ? 'bg-gray-100' : '',
-                                'block w-full px-4 py-2 text-left text-sm text-gray-700'
+                                'block w-full text-left px-4 py-2 text-sm text-gray-700'
                               )}
                             >
                               Sign out
@@ -93,22 +133,7 @@ export function Navbar() {
                       </Menu.Items>
                     </Transition>
                   </Menu>
-                ) : (
-                  <div className="space-x-4">
-                    <Link
-                      href="/login"
-                      className="rounded-md bg-rose-600 px-4 py-2 text-sm font-medium text-white hover:bg-rose-700"
-                    >
-                      Sign in
-                    </Link>
-                    <Link
-                      href="/register"
-                      className="rounded-md border border-rose-600 px-4 py-2 text-sm font-medium text-rose-600 hover:bg-rose-50"
-                    >
-                      Sign up
-                    </Link>
-                  </div>
-                )}
+                ) : null}
               </div>
               <div className="-mr-2 flex items-center sm:hidden">
                 <Disclosure.Button className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-rose-500">
@@ -125,37 +150,56 @@ export function Navbar() {
 
           <Disclosure.Panel className="sm:hidden">
             <div className="space-y-1 pb-3 pt-2">
-              {navigation.map((item) => (
-                <Disclosure.Button
-                  key={item.name}
-                  as={Link}
-                  href={item.href}
-                  className="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700"
-                >
-                  {item.name}
-                </Disclosure.Button>
-              ))}
-            </div>
-            {!session && (
-              <div className="border-t border-gray-200 pb-3 pt-4">
-                <div className="space-y-1">
+              <Disclosure.Button
+                as={Link}
+                href="/"
+                className="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700"
+              >
+                Home
+              </Disclosure.Button>
+              {session ? (
+                <>
+                  <Disclosure.Button
+                    as={Link}
+                    href="/dashboard"
+                    className="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700"
+                  >
+                    Dashboard
+                  </Disclosure.Button>
+                  <Disclosure.Button
+                    as={Link}
+                    href="/matches"
+                    className="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700"
+                  >
+                    Matches
+                  </Disclosure.Button>
+                  <Disclosure.Button
+                    as="button"
+                    onClick={() => signOut()}
+                    className="block w-full text-left border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700"
+                  >
+                    Sign out
+                  </Disclosure.Button>
+                </>
+              ) : (
+                <>
                   <Disclosure.Button
                     as={Link}
                     href="/login"
-                    className="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800"
+                    className="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700"
                   >
-                    Sign in
+                    Login
                   </Disclosure.Button>
                   <Disclosure.Button
                     as={Link}
                     href="/register"
-                    className="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800"
+                    className="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700"
                   >
-                    Sign up
+                    Register
                   </Disclosure.Button>
-                </div>
-              </div>
-            )}
+                </>
+              )}
+            </div>
           </Disclosure.Panel>
         </>
       )}
