@@ -6,15 +6,12 @@ const nextConfig = {
     domains: ['localhost', 'www.onlysmash.com', 'lh3.googleusercontent.com', 'avatars.githubusercontent.com'],
     unoptimized: true,
   },
-  experimental: {
-    serverActions: true,
-  },
   eslint: {
     ignoreDuringBuilds: true,
   },
   typescript: {
     ignoreBuildErrors: true,
-  },
+  }
 }
 
 module.exports = nextConfig 
