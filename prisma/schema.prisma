@@ -5,7 +5,6 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
   relationMode = "foreignKeys"
 }
 
@@ -48,7 +47,12 @@ model User {
   gender        String?
   location      String?
   occupation    String?
-  interests     String[]
+  hairColor     String?
+  eyeColor      String?
+  height        String?
+  ethnicity     String?
+  religion      String?
+  hasChildren   String?
   accounts      Account[]
   sessions      Session[]
   photos        Photo[]
